@@ -1,0 +1,26 @@
+{
+  "name": "@work-pack/work-auth-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@work-pack/work-auth"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/work-auth-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@work-pack/work-auth:build",
+          "@work-pack/work-auth:serve"
+        ]
+      }
+    }
+  }
+}
