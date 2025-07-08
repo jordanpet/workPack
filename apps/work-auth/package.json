@@ -5,6 +5,9 @@
   "nx": {
     "targets": {
       "build": {
+        "dependsOn": [
+          "generate-types"
+        ],
         "executor": "nx:run-commands",
         "options": {
           "command": "webpack-cli build",
@@ -49,8 +52,31 @@
         "dependsOn": [
           "build"
         ],
-        "command": "docker build -f apps/work-auth/Dockerfile . -t work-pack-work-auth"
+        "executor": "@nrwl/workspace:run-commands",
+        "options": {
+          "command": "docker build -f apps/work-auth/Dockerfile . -t work-pack-work-auth"
+        }
+      },
+      "generate-types": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "prisma generate",
+          "cwd": "apps/work-auth"
+        }
+      },
+      "migrate-prisma": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "prisma migrate dev",
+          "cwd": "apps/work-auth"
+        }
       }
     }
+  },
+  "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "@nestjs/apollo": "^13.1.0",
+    "@nestjs/graphql": "^13.1.0",
+    "graphql": "^16.11.0"
   }
 }
