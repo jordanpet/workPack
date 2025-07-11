@@ -37,7 +37,7 @@
         ],
         "options": {
           "buildTarget": "@work-pack/work-auth:build",
-          "runBuildTargetDependencies": false
+          "runBuildTargetDependencies": true
         },
         "configurations": {
           "development": {
