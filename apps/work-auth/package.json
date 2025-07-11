@@ -4,47 +4,53 @@
   "private": true,
   "nx": {
     "targets": {
+      "generate-types": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "prisma generate",
+          "cwd": "apps/work-auth"
+        }
+      },
       "build": {
         "dependsOn": [
           "generate-types"
         ],
-        "test": {
-          "dependsOn": [
-            "generate-types"
-          ]
-        },
-        "executor": "nx:run-commands",
+        "executor": "@nrwl/node:webpack",
         "options": {
-          "command": "webpack-cli build",
-          "args": [
-            "--node-env=production"
+          "outputPath": "dist/apps/work-auth",
+          "main": "apps/work-auth/src/main.ts",
+          "tsConfig": "apps/work-auth/tsconfig.app.json",
+          "assets": [
+            "apps/work-auth/src/assets"
           ]
         },
         "configurations": {
+          "production": {
+            "optimization": true,
+            "sourceMap": false,
+            "extractLicenses": true
+          },
           "development": {
-            "args": [
-              "--node-env=development"
-            ]
+            "optimization": false,
+            "sourceMap": true,
+            "extractLicenses": false
           }
         }
       },
       "serve": {
-        "continuous": true,
-        "executor": "@nx/js:node",
-        "defaultConfiguration": "development",
+        "executor": "@nrwl/node:node",
         "dependsOn": [
           "build"
         ],
         "options": {
-          "buildTarget": "@work-pack/work-auth:build",
-          "runBuildTargetDependencies": true
+          "buildTarget": "@work-pack/work-auth:build"
         },
         "configurations": {
-          "development": {
-            "buildTarget": "@work-pack/work-auth:build:development"
-          },
           "production": {
             "buildTarget": "@work-pack/work-auth:build:production"
+          },
+          "development": {
+            "buildTarget": "@work-pack/work-auth:build:development"
           }
         }
       },
@@ -62,13 +68,6 @@
           "command": "docker build -f apps/work-auth/Dockerfile . -t work-pack-work-auth"
         }
       },
-      "generate-types": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "prisma generate",
-          "cwd": "apps/work-auth"
-        }
-      },
       "migrate-prisma": {
         "executor": "nx:run-commands",
         "options": {
@@ -82,6 +81,14 @@
     "@apollo/server": "^4.12.2",
     "@nestjs/apollo": "^13.1.0",
     "@nestjs/graphql": "^13.1.0",
-    "graphql": "^16.11.0"
+    "@nestjs/passport": "^11.0.5",
+    "cookie-parser": "^1.4.7",
+    "graphql": "^16.11.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/passport-jwt": "^4.0.1"
   }
 }
